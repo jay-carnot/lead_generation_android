@@ -1,5 +1,6 @@
 package com.carnot.leadgeneration
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -17,6 +19,7 @@ import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
     private var webView: WebView? = null
+    private var logout: ImageView? = null
 
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 123
@@ -26,6 +29,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_webview)
         webView = findViewById(R.id.webview)
+        logout = findViewById(R.id.logout)
+
+        logout?.setOnClickListener {
+            SharedPreferencesUtil.setUsername(this@MainActivity,"")
+            val intent = Intent(this@MainActivity, SplashActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         val webSettings = webView!!.settings
         webSettings.javaScriptEnabled = true // Enable JavaScript if needed
         webSettings.domStorageEnabled = true
@@ -34,8 +46,9 @@ class MainActivity : AppCompatActivity() {
         webView!!.webChromeClient =
             MyWebChromeClient() // Set ChromeClient to handle JavaScript dialogs, etc.
 
+        val userName = SharedPreferencesUtil.getUsername(this@MainActivity)
         // Load a webpage
-        webView!!.loadUrl("https://main.d1wqrfxgnwts0g.amplifyapp.com/")
+        webView!!.loadUrl("https://main.d1wqrfxgnwts0g.amplifyapp.com/?user=$userName")
     }
 
     override fun onBackPressed() {

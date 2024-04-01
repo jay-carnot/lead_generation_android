@@ -77,9 +77,16 @@ class SplashActivity : AppCompatActivity() {
     // Method to move to the main activity after a delay
     private fun moveToMainActivity() {
         Handler().postDelayed({
-            val intent = Intent(this@SplashActivity, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+            if (SharedPreferencesUtil.getUsername(this@SplashActivity)?.isNotEmpty() == true){
+                val intent = Intent(this@SplashActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }else{
+                val intent = Intent(this@SplashActivity, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
         }, 2000) // Delay in milliseconds
     }
 
