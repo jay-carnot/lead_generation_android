@@ -1,11 +1,13 @@
 package com.carnot.leadgeneration
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.carnot.leadgeneration.api.AuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,7 +22,7 @@ class AuthViewModel @Inject constructor( private val authService: AuthService) :
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    fun login(username: String, password: String) {
+    fun login(username: String, password: String,context: Context) {
         _isLoading.value = true
         viewModelScope.launch(Dispatchers.Main) {
             // Make network call in background thread
@@ -34,6 +36,7 @@ class AuthViewModel @Inject constructor( private val authService: AuthService) :
                     {
                         _isLoggedIn.value = true
                         _isLoading.value = false
+                        SharedPreferencesUtil.setUsername(context, user.fields.userID)
                         return@launch
                     }
                 }

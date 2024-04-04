@@ -38,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
         }
          authViewModel.isLoggedIn.observe(this){
             if (it){
-                SharedPreferencesUtil.setUsername(this@LoginActivity, editTextUserId.text.toString())
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -61,6 +60,6 @@ class LoginActivity : AppCompatActivity() {
         // Here, you can implement your login logic.
         // For demonstration purposes, we'll just display a toast message.
         val message = "User ID: $userId\nPassword: $password"
-        authViewModel.login(userId,password)
+        authViewModel.login(userId,password,this@LoginActivity)
     }
 }
