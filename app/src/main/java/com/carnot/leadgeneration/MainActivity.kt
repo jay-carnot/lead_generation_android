@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.View
 import android.webkit.GeolocationPermissions
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         val userName = SharedPreferencesUtil.getUsername(this@MainActivity)
         // Load a webpage
         webView!!.loadUrl("https://main.d1wqrfxgnwts0g.amplifyapp.com/?user=$userName")
+        webView!!.visibility = View.GONE
     }
 
     override fun onBackPressed() {
@@ -125,6 +127,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onPageFinished(view: WebView, url: String) {
+            webView!!.visibility = View.VISIBLE
         }
 
         override fun onReceivedError(
@@ -136,6 +139,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+
             val url = request.url.toString()
             view.loadUrl(url)
             return false

@@ -3,6 +3,8 @@ package com.carnot.leadgeneration
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -32,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
         buttonLogin.setOnClickListener {
             val userId = editTextUserId.text.toString()
             val password = editTextPassword.text.toString()
-
+            hideKeyboard(buttonLogin)
             // Call a function to handle login
             login(userId, password)
         }
@@ -42,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             } else{
-                Toast.makeText(this@LoginActivity,"Try Again",Toast.LENGTH_LONG).show()
+                Toast.makeText(this@LoginActivity,"User Not Valid",Toast.LENGTH_LONG).show()
             }
          }
 
@@ -62,4 +64,9 @@ class LoginActivity : AppCompatActivity() {
         val message = "User ID: $userId\nPassword: $password"
         authViewModel.login(userId,password,this@LoginActivity)
     }
+
+
+    fun hideKeyboard(view: View) =
+        (baseContext.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as? InputMethodManager)!!
+            .hideSoftInputFromWindow(view.windowToken, 0)
 }
